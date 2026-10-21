@@ -51,16 +51,16 @@ representativo de cada polígono, usado como coordenada aproximada para
 os estabelecimentos daquele bairro.
 
 A correspondência entre os nomes dos bairros é normalizada, incluindo
-diferenças de acentuação, caixa e espaços. Também há aliases explícitos
-para nomes equivalentes conhecidos. Aliases são decisões de normalização
-e devem ser revisados se a fonte de dados mudar; uma correspondência
+diferenças de acentuação, caixa alta e espaços. Também há variações de nomes
+para nomes equivalentes conhecidos. As variações dos nomes são decisões de normalização
+e foram feitas para os dados fornecidos; uma correspondência
 nominal não confirmada pode associar um registro ao bairro incorreto.
 
 Na execução de validação mais recente registrada durante o
 desenvolvimento, a base tinha 20.859 estabelecimentos, dos quais 20.696
 foram indexados e 163 ficaram sem correspondência. Esses números são uma
 fotografia da versão dos dados e das regras de correspondência usadas
-naquela execução; devem ser recalculados caso a base ou os aliases sejam
+naquela execução; devem ser recalculados caso a base ou os nomes sejam
 alterados.
 
 ### Consequência da aproximação
@@ -115,7 +115,7 @@ A busca espacial é realizada em duas fases:
     cobre o raio solicitado e gera prefixos Geohash para as células que
     intersectam essa região. A precisão de busca pode ser reduzida para
     evitar a geração de uma quantidade excessiva de células candidatas.
-2.  **Filtragem exata:** os registros candidatos são deduplicados por
+2.  **Filtragem exata:** os registros candidatos são analisados (cópias removidas) por
     identificador e sua distância até o ponto de consulta é calculada
     pela fórmula de Haversine. Apenas registros com distância menor ou
     igual ao raio são mantidos. Os resultados são ordenados pela
@@ -130,7 +130,7 @@ candidatos após a recuperação pela Trie e `r` é o número de resultados
 finais, a filtragem de distâncias custa `O(q)` e a ordenação custa
 `O(r log r)`. O custo total pode ser descrito como:
 
-`O(c + custo_da_recuperação_dos_prefixos + q + r log r)`.
+`O(c + custo da recuperação dos prefixos + q + r log r)`.
 
 Esse custo depende da distribuição espacial dos dados e da quantidade de
 candidatos. No pior caso, uma consulta que cubra uma região com grande
@@ -151,7 +151,7 @@ pontos pela área do círculo em vez de concentrá-los no centro. Um ângulo
 aleatório determina a direção.
 
 Como pontos puramente aleatórios podem cair dentro de edifícios,
-quarteirões fechados ou corpos d'água, o sistema usa OSMnx para obter um
+quarteirões fechados ou lagos/lagoas, o sistema usa OSMnx para obter um
 grafo de vias de condução em torno do ponto de referência. O grafo é
 armazenado localmente em formato GraphML e reutilizado quando
 disponível. Ele é projetado para um sistema de coordenadas métrico antes
@@ -262,15 +262,14 @@ aproximada aos bairros, conforme os arquivos presentes na pasta
 A interface foi validada manualmente para pesquisa textual, seleção de
 referência, ajuste do raio, geração/substituição dos entregadores, cores
 de disponibilidade e visualização dos pontos corrigidos sobre a malha
-viária. Recomenda-se registrar capturas de tela do mapa e da tabela na
-versão final entregue.
+viária.
 
 ## 10. Limitações e melhorias futuras
 
 1.  **Geocodificação dos endereços:** substituir o ponto representativo
     do bairro por coordenadas reais e verificadas de cada
     estabelecimento.
-2.  **Correspondência de bairros:** revisar aliases e registros sem
+2.  **Correspondência de bairros:** revisar nomes e registros sem
     correspondência, sem assumir equivalência apenas por semelhança
     textual.
 3.  **Roteamento real:** calcular distância de percurso e ETA pela rede
@@ -281,9 +280,7 @@ versão final entregue.
 5.  **Desempenho:** medir tempos de construção do índice, quantidade de
     candidatos por consulta e tempos de busca para diferentes raios e
     conjuntos de dados.
-6.  **Reprodutibilidade:** registrar versões das dependências,
-    versão/data dos arquivos de entrada e os resultados dos testes
-    finais.
+
 
 ## 11. Fontes e atribuição
 
